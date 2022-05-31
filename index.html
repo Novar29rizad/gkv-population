@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.1.1/d3.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js" ></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,6 +28,84 @@
             </div>
         </div>
     </div>
+    
+    <!-- Add Charts  -->
+    <div class="graphBox">
+        <!-- <div class="box">
+            <canvas id="myChart" ></canvas>
+        </div> -->
+        <!-- <script src="my_chart.js" ></script> -->
+        <div class="box">
+            <canvas id = "Chart"> </canvas>
+        </div>
+        <script>
+            const xlabels = [];
+            const ytemps = [];
+        
+            chartIt();
+        
+            async function chartIt() {
+                await getData();
+                const ctx = document.getElementById('Chart').getContext('2d');
+                const myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: xlabels,
+                        datasets: [{
+                            label: 'World Popupaltion and Yearly',
+                            data: ytemps,
+                            fill: false,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(255, 159, 64, 0.2)',
+                                'rgba(255, 205, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(201, 203, 207, 0.2)'
+                                ],
+                                borderColor: [
+                                'rgb(255, 99, 132)',
+                                'rgb(255, 159, 64)',
+                                'rgb(255, 205, 86)',
+                                'rgb(75, 192, 192)',
+                                'rgb(54, 162, 235)',
+                                'rgb(153, 102, 255)',
+                                'rgb(201, 203, 207)'
+                                ],
+                            borderWidth: 1
+                        }]
+                    }
+                });
+            }
+        
+            async function getData() {
+                const response = await fetch('world_population.csv');
+                const data = await response.text();
+        
+                const table = data.split('\n').slice(1);
+                table.forEach(row =>{
+                    const columns = row.split(',');
+                    const country = columns[0];
+                    xlabels.push(country);
+                    const yearly = columns[2];
+                    ytemps.push(yearly)
+                    console.log(country, yearly);
+        
+                });
+            }
+        
+            </script>
+        
+        <div class="box">
+            <div class="row d-flex justify-content-center">
+                <canvas class="col-sm-6" id="pie" width="600" height="400"></canvas>
+                <div class="col-sm-6 fs-3">Pie Chart</div>
+            </div>
+        </div>
+    
+    </div>
+    
     <script src="piechart.js"></script>
 </body>
 </html>
